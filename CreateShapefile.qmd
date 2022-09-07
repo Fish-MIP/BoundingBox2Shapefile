@@ -1,0 +1,52 @@
+---
+title: "Create Shapefile"
+author: "Julia Blanchard"
+format: html
+editor: visual
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Convert your bounding box to a shapefile
+
+If you would like to create a map in R or combine shapefiles to create a mask, it may be helpful to create a shapefile first and save it for later.
+
+This simple R code does that for a set of bounding boxes for regional ecosystem models used in FishMIP.
+
+First, install packages you need:
+
+```{r}
+install.packages("sp")
+install.packages("sf")
+install.packages("raster")
+install.packages("tidyverse")
+install.packages("spData")
+install.packages("tmap")
+
+library(sp)
+library(sf)
+library(raster)
+library(tidyverse)
+library(spData)
+library(tmap)
+
+```
+
+## Set up Bounding Box 
+
+
+```{r,echo=FALSE}
+cook_strait <- as(raster::extent(174.5, 179.5,  -46.5, -40.5), "SpatialPolygons")
+proj4string(cook_strait) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+plot(cook_strait)
+
+shapefile(cook_strait, filename='cook_strait.shp')
+
+cook_strait_shp <- st_read(
+  "cook_strait.shp")
+cook_strait_shp
+```
+
